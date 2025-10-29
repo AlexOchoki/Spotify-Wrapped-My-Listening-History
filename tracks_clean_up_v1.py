@@ -183,14 +183,14 @@ def main():
     # === Export section (CSV only) ===
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # 🕒 create timestamp for filename
+    # create timestamp for filename
     timestamp = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     out_csv = OUTPUT_DIR / f"spotify_clean_{timestamp}.csv"
 
     # Save to CSV
     df.to_csv(out_csv, index=False, encoding="utf-8-sig")
 
-    logging.info("✅ Done! Cleaned CSV saved to: %s", out_csv)
+    logging.info("Done! Cleaned CSV saved to: %s", out_csv)
     print(f"Rows exported: {len(df):,}\nFile: {out_csv}")
 
 
