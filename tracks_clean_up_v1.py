@@ -133,7 +133,12 @@ def build_dataframe(records) -> pd.DataFrame:
     df["Hour"]        = df["Played At"].dt.hour
     df["Day"]         = df["Played At"].dt.day_name().str[:3]
     df["Day Date"]    = df["Played At"].dt.day
-    df["MonthStart"]  = df["Played At"].dt.to_period("M").dt.to_timestamp()
+    df["MonthStart"] = (
+    df["Played At"].dt.tz_convert("UTC")
+    .dt.tz_localize(None)
+    .dt.to_period("M")
+    .dt.to_timestamp()
+)
 
     # Safer record_id: ISO8601 local + track/episode + duration
     iso_ts = df["Played At"].dt.strftime("%Y-%m-%dT%H:%M:%S%z").str.replace(
@@ -161,6 +166,8 @@ def build_dataframe(records) -> pd.DataFrame:
     ]
     return df[cols]
 
+import datetime
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 
@@ -169,7 +176,7 @@ def main():
 
     records = load_json_records(files)
     records = normalize_records(records)
-    logging.info("Loaded %,d raw records.", len(records))
+    logging.info(f"Loaded {len(records):,} raw records.")
 
     df = build_dataframe(records)
 
