@@ -173,9 +173,12 @@ def main():
 
     df = build_dataframe(records)
 
-        # === Export section (CSV only) ===
+    # === Export section (CSV only) ===
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_csv = OUTPUT_DIR / "spotify_clean.csv"
+
+    # 🕒 create timestamp for filename
+    timestamp = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    out_csv = OUTPUT_DIR / f"spotify_clean_{timestamp}.csv"
 
     # Save to CSV
     df.to_csv(out_csv, index=False, encoding="utf-8-sig")
